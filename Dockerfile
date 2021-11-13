@@ -12,6 +12,6 @@ RUN /usr/local/bin/python -m pip install --upgrade pip --no-cache-dir \
 COPY ./src/ ./src/
 USER 1000:2000
 ENTRYPOINT ["python", "/app/src/webcolors.py"]
-CMD ["--color", "red"]
+CMD ["--color", "green"]
 # ENTRYPOINT ["python", "/app/src/webcolors.py", "--color", "red"]
 # ENV COLOR=red
