@@ -1,0 +1,33 @@
+---
+version: 2
+updates:
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      target-branch: "develop"
+      schedule:
+          interval: "monthly"
+          day: "saturday"
+          time: "09:00"
+          timezone: "Europe/Moscow"
+      labels:
+          - "dependencies"
+    - package-ecosystem: "pip"
+      directory: "/"
+      target-branch: "develop"
+      schedule:
+          interval: "weekly"
+          day: "saturday"
+          time: "09:00"
+          timezone: "Europe/Moscow"
+      labels:
+          - "dependencies"
+    - package-ecosystem: "docker"
+      directory: "/"
+      target-branch: "develop"
+      schedule:
+          interval: "weekly"
+          day: "saturday"
+          time: "09:00"
+          timezone: "Europe/Moscow"
+      labels:
+          - "dependencies"

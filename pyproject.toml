@@ -1,0 +1,31 @@
+[tool.black]
+line-length = 100
+target_version = ["py39"]
+include = '\.pyi?$'
+exclude = '((\.eggs|\.git|\.venv)|foo.py)'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.pyright]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+plugins = "pydantic.mypy"
+exclude = '\.venv'
+show_error_codes = true
+
+[tool.pydocstyle]
+convention = "numpy"
+
+[tool.pylint.FORMAT]
+max-line-length = 100
+
+[tool.pylint.BASIC]
+good-names = ["i","db"]
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"

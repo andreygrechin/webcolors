@@ -1,0 +1,8 @@
+.venv
+
+.mypy_cache/
+
+*.log
+
+*.env
+*.key

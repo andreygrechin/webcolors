@@ -1,0 +1,11 @@
+bandit
+black
+darglint
+isort
+mypy
+pycodestyle
+pydantic
+pydocstyle
+pylint
+rope
+safety
