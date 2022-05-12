@@ -11,6 +11,10 @@ RUN /usr/local/bin/python -m pip install --upgrade pip --no-cache-dir \
     && chown 1000:2000 /app/logs
 COPY ./src/ ./src/
 USER 1000:2000
+ENV GITHUB_SHA=${GITHUB_SHA}
+ENV GITHUB_REF=${GITHUB_REF}
+ENV RUNNER_ARCH=${RUNNER_ARCH}
+ENV RUNNER_OS=${RUNNER_OS}
 ENTRYPOINT ["python", "/app/src/webcolors.py"]
 CMD ["--color", "green"]
 
