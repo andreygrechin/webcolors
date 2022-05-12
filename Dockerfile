@@ -1,4 +1,4 @@
-FROM python:3.9-alpine3.14
+FROM python:3.10-alpine3.15
 LABEL env=test \
     os=alpine \
     app=webcolors
@@ -13,5 +13,7 @@ COPY ./src/ ./src/
 USER 1000:2000
 ENTRYPOINT ["python", "/app/src/webcolors.py"]
 CMD ["--color", "green"]
-# ENTRYPOINT ["python", "/app/src/webcolors.py", "--color", "red"]
+
+# different ways to provide environment variables and arguments
+# ENTRYPOINT ["python", "/app/src/webcolors.py", "--color", "green"]
 # ENV COLOR=red

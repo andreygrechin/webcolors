@@ -1,7 +1,7 @@
 # An example of a containerized Flask app to play with k8s and Docker
 
 The app shows one page with information about the server inside a container and
-a client who requests this page. By default gray background is used for the
+a client who requests this page. By default **gray** background is used for the
 page. You may redefine the background color by specifying the environment
 variable `COLOR` or providing an additional argument `--color`.
 
@@ -16,21 +16,31 @@ For example, to pull and run:
 ## Docker
 
 ```sh
-docker run --rm -p 8080:8080 andreygrechin/webcolors:latest
-docker run --rm -p 8080:8080 -e COLOR=gold andreygrechin/webcolors:latest
-docker run --rm -p 8080:8080 --pull always -e COLOR=blue andreygrechin/webcolors:0.1
-docker run --rm -p 8080:8080 --pull always andreygrechin/webcolors:0.1 --color red
+docker run --rm --detach --publish 8081:8080 andreygrechin/webcolors:latest
+open http://localhost:8081/
 
-open http://localhost:8080/
+docker run --rm --detach --publish 8082:8080 --env COLOR=gold andreygrechin/webcolors:latest
+open http://localhost:8082/
+
+docker run --rm --detach --publish 8083:8080 --env COLOR=blue andreygrechin/webcolors:0.1.3
+open http://localhost:8083/
+
+docker run --rm --detach --publish 8084:8080 andreygrechin/webcolors:0.1.3 --color red
+open http://localhost:8084/
 ```
 
 ## GitHub
 
 ```sh
-docker run --rm -p 8080:8080 ghcr.io/andreygrechin/webcolors:latest
-docker run --rm -p 8080:8080 -e COLOR=gold ghcr.io/andreygrechin/webcolors:latest
-docker run --rm -p 8080:8080 --pull always -e COLOR=blue ghcr.io/andreygrechin/webcolors:0.1
-docker run --rm -p 8080:8080 --pull always ghcr.io/andreygrechin/webcolors:0.1 --color red
+docker run --rm --detach --publish 8085:8080 ghcr.io/andreygrechin/webcolors:latest
+open http://localhost:8085/
 
-open http://localhost:8080/
+docker run --rm --detach --publish 8086:8080 --env COLOR=gold ghcr.io/andreygrechin/webcolors:latest
+open http://localhost:8086/
+
+docker run --rm --detach --publish 8087:8080 --env COLOR=blue ghcr.io/andreygrechin/webcolors:0.1.3
+open http://localhost:8087/
+
+docker run --rm --detach --publish 8088:8080 ghcr.io/andreygrechin/webcolors:0.1.3 --color red
+open http://localhost:8088/
 ```
