@@ -66,7 +66,7 @@ jobs:
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
                   build-args: |
-                      GITHUB_SHA=${{ env.GITHUB_SHA }}
-                      GITHUB_REF=${{ env.GITHUB_REF }}
-                      RUNNER_ARCH=${{ env.RUNNER_ARCH }}
-                      RUNNER_OS=${{ env.RUNNER_OS }}
+                      GITHUB_SHA=${GITHUB_SHA}
+                      GITHUB_REF=${GITHUB_REF}
+                      RUNNER_ARCH=${RUNNER_ARCH}
+                      RUNNER_OS=${RUNNER_OS}
