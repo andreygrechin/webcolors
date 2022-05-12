@@ -34,12 +34,18 @@ jobs:
               run: |
                   echo ${RELEASE_VERSION}
                   echo ${{ env.RELEASE_VERSION }}
+            - name: Set build args
+              run: |
+                  echo "GITHUB_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
+                  echo "GITHUB_REF=${GITHUB_REF}" >> $GITHUB_ENV
+                  echo "RUNNER_ARCH=${RUNNER_ARCH}" >> $GITHUB_ENV
+                  echo "RUNNER_OS=${RUNNER_OS}" >> $GITHUB_ENV
             - name: Check build args
               run: |
-                  echo ${GITHUB_SHA}
-                  echo ${GITHUB_REF}
-                  echo ${RUNNER_ARCH}
-                  echo ${RUNNER_OS}
+                  echo ${{ env.GITHUB_SHA }}
+                  echo ${{ env.GITHUB_REF }}
+                  echo ${{ env.RUNNER_ARCH }}
+                  echo ${{ env.RUNNER_OS }}
             - name: Extract metadata (tags, labels) for Docker
               id: meta
               uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
