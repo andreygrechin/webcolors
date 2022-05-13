@@ -10,9 +10,9 @@ echo Image name: ${image_name}:${image_version}
 
 docker run --rm -i hadolint/hadolint < Dockerfile
 
-docker build -t ${image_name}:${image_version} .
-docker run -d -p 8080:8080 --name ${image_name} ${image_name}:${image_version}
+docker build --build-arg VERSION_TAG="local-build" --tag ${image_name}:${image_version} .
+docker run --detach --publish 8080:8080 --name ${image_name} ${image_name}:${image_version}
 open http://localhost:8080/
 docker exec -it ${image_name} sh
-docker rm -f ${image_name}
+docker rm --force ${image_name}
 docker rmi ${image_name}:${image_version}

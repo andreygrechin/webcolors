@@ -47,16 +47,18 @@ def main():
         Rendered HTML page
     """
     params: dict[str, str] = {
+        "Version tag": os.environ.get("VERSION_TAG", default="N/A"),
         "Background color": f"{COLOR_NAME} ({COLORS[COLOR_NAME]})",
+        "GitHub Actions is running the workflow": os.environ.get("GITHUB_ACTIONS", default="false"),
+        "Commit number": os.environ.get("GITHUB_SHA", default="N/A"),
+        "Short commit number": os.environ.get("GITHUB_SHA", default="N/A")[:7],
+        "Tag ref that triggered the workflow": os.environ.get("GITHUB_REF", default="N/A"),
+        "Created on OS": os.environ.get("RUNNER_OS", default="N/A"),
+        "Created on arch": os.environ.get("RUNNER_ARCH", default="N/A"),
         "Server hostname": socket.gethostname(),
         "Server socket": request.server,
         "Client IP address": request.remote_addr,
         "Client User-Agent": request.user_agent.string,
-        "GitHub Actions is running the workflow": os.environ.get("GITHUB_ACTIONS", default="false"),
-        "Commit number": os.environ.get("GITHUB_SHA", default="N/A"),
-        "Tag ref that triggered the workflow": os.environ.get("GITHUB_REF", default="N/A"),
-        "Created on arch": os.environ.get("RUNNER_ARCH", default="N/A"),
-        "Created on OS": os.environ.get("RUNNER_OS", default="N/A"),
     }
 
     return render_template("hello.html.j2", bgcolor=COLORS[COLOR_NAME], params=params)
