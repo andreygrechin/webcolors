@@ -1,0 +1,3 @@
+[submodule "submodules/semver-tool"]
+	path = submodules/semver-tool
+	url = https://github.com/fsaintjacques/semver-tool
