@@ -58,8 +58,13 @@ def main():
         "Server hostname": socket.gethostname(),
         "Server socket": request.server,
         "Client IP address": request.remote_addr,
-        "Client User-Agent": request.user_agent.string,
     }
+    if args.debug:
+        params |= {
+            "Request headers": str(request.headers).replace("\r\n", "<br>"),
+            "Request method": request.method,
+            "Request URL": request.url,
+        }
 
     return render_template("hello.html.j2", bgcolor=COLORS[COLOR_NAME], params=params)
 
@@ -68,6 +73,7 @@ def print_help():
     """Print a help message."""
     app.logger.info(  # pylint:disable=no-member
         f"""
+
         This is a sample dockerized web application that displays one page
         with a colored background. A color can be specified in a few ways,
         in order of priority:
@@ -79,7 +85,10 @@ def print_help():
         Supported colors: {SUPPORTED_COLORS}
         Also you may choose a `random` as an option.
 
-        To open the page from docker container, use `open http://localhost:8080/`.
+        For debug use `--debug` flag.
+
+        To open the page from docker container, use: open
+            http://localhost:8080/
 
         """
     )
@@ -89,6 +98,7 @@ if __name__ == "__main__":
     print_help()
     parser = argparse.ArgumentParser()
     parser.add_argument("--color", required=False)
+    parser.add_argument("--debug", action="store_true")
     args = parser.parse_args()
 
     if args.color:
@@ -112,4 +122,4 @@ if __name__ == "__main__":
     app.logger.info(f"Finally, {COLOR_NAME} color will be used.\n")
 
     # Run Flask
-    app.run(host="0.0.0.0", port=8080)  # nosec
+    app.run(host="0.0.0.0", port=8080, debug=args.debug)  # nosec
