@@ -20,7 +20,6 @@ dev = [
     "pydocstyle",
     "pylint",
     "rope",
-    "safety",
     "toml",
     "types-PyYAML",
     "types-requests",

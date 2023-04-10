@@ -28,8 +28,8 @@ lint-sec:
 		printf -- "\033[36;1m$$PY_FOLDER... \033[0m \n"; \
 		printf -- "\033[34;1mbandit \033[0m \n"; \
 		bandit --recursive -s B101 $$PY_FOLDER || echo "failed, continue..."; \
-		printf -- "\033[34;1msafety \033[0m \n"; \
-		safety check || echo "failed, continue..."; \
+		printf -- "\033[34;1mpip-audit \033[0m \n"; \
+		pip-audit || echo "failed, continue..."; \
 	done
 
 .PHONY: lint-pkg
