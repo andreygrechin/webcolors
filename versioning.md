@@ -3,14 +3,14 @@
 ## Add build
 
 ```sh
-scripts/semver bump build $(date --utc +%Y%m%dT%H%M%S%Z) $(cat VERSION)
+scripts/semver bump build $(date -u +%Y%m%dT%H%M%S%Z) $(cat VERSION)
 ```
 
 ## Up versions
 
 ```sh
 # add build info
-scripts/semver bump build $(date --utc +%Y%m%dT%H%M%S%Z) $(cat VERSION)
+scripts/semver bump build $(date -u +%Y%m%dT%H%M%S%Z) $(cat VERSION)
 # up a prerelease version
 scripts/semver bump prerel alpha $(cat VERSION)
 # release a dev version
