@@ -30,15 +30,25 @@
         }
 
         table {
-            display: block;
             max-width: 50%;
-            width: fit-content;
+            width: 100%;
         }
 
         .center {
             margin-left: auto;
             margin-right: auto;
         }
+
+        .column1 {
+            width: 20%;
+            min-width: 100px;
+        }
+
+        .column2 {
+            width: 80%;
+            min-width: 400px;
+        }
+
     </style>
 </head>
 
@@ -53,8 +63,8 @@
         <tbody>
             {% for key, value in params.items() -%}
             <tr>
-                <td>{{ key }}</td>
-                <td>{{ value }}</td>
+                <td class="column1">{{ key }}</td>
+                <td class="column2">{{ value }}</td>
             </tr>
             {% endfor %}
         </tbody>
