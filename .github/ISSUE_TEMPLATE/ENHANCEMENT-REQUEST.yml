@@ -22,7 +22,7 @@ body:
           label: What would you like to enhance?
           description: Also, tell us why this is important.
           placeholder: Tell us what you would like to improve!
-          value: "An enhancement request"
+          #   value: "An enhancement request"
       validations:
           required: true
     - type: textarea
@@ -35,7 +35,7 @@ body:
       id: terms
       attributes:
           label: Code of Conduct
-          description: By submitting this issue, you agree to follow our [Code of Conduct](.github/CODE_OF_CONDUCT.md)
+          description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/andreygrechin/webcolors/blob/main/.github/CODE_OF_CONDUCT.md)
           options:
               - label: I agree to follow this project's Code of Conduct
                 required: true
