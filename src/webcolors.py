@@ -49,6 +49,7 @@ def main():
     params: dict[str, str] = {
         "Version tag": os.environ.get("VERSION_TAG", default="N/A"),
         "Background color": f"{COLOR_NAME} ({COLORS[COLOR_NAME]})",
+        "Supported colors": SUPPORTED_COLORS,
         "GitHub Actions is running the workflow": os.environ.get("GITHUB_ACTIONS", default="false"),
         "Commit number": os.environ.get("GITHUB_SHA", default="N/A"),
         "Short commit number": os.environ.get("GITHUB_SHA", default="N/A")[:7],
