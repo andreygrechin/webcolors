@@ -7,27 +7,27 @@ updates:
       schedule:
           interval: "monthly"
           day: "saturday"
-          time: "09:00"
-          timezone: "Europe/Moscow"
+          time: "18:00"
+          timezone: "Etc/UTC"
       labels:
           - "dependencies"
     - package-ecosystem: "pip"
       directory: "/"
       target-branch: "develop"
       schedule:
-          interval: "weekly"
+          interval: "monthly"
           day: "saturday"
-          time: "09:00"
-          timezone: "Europe/Moscow"
+          time: "18:00"
+          timezone: "Etc/UTC"
       labels:
           - "dependencies"
     - package-ecosystem: "docker"
       directory: "/"
       target-branch: "develop"
       schedule:
-          interval: "weekly"
+          interval: "monthly"
           day: "saturday"
-          time: "09:00"
-          timezone: "Europe/Moscow"
+          time: "18:00"
+          timezone: "Etc/UTC"
       labels:
           - "dependencies"
