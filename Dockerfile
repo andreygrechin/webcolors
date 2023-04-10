@@ -18,9 +18,9 @@ LABEL env=test \
     app=webcolors
 EXPOSE 8080
 WORKDIR /app
-COPY ./requirements.txt ./
+COPY ./pyproject.toml ./
 RUN /usr/local/bin/python -m pip install --upgrade pip --no-cache-dir \
-    && pip install --no-cache-dir -r /app/requirements.txt \
+    && pip install --no-cache-dir . \
     && mkdir /app/logs \
     && chown 1000:2000 /app/logs
 COPY ./src/ ./src/
