@@ -5,7 +5,8 @@ description = "An example of a containerized Flask app to play with k8s and Dock
 keywords = ["flask", "", "test"]
 requires-python = ">=3.10,<4"
 readme = "README.md"
-dependencies = ["Flask>=2.0,<3"]
+# dependencies = ["Flask>=2.0,<3"]
+dependencies = ["Flask>=2.2.3,<3"]
 
 [project.optional-dependencies]
 dev = [
