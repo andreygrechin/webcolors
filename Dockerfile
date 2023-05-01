@@ -1,4 +1,4 @@
-FROM python:3.10.10-alpine3.16
+FROM python:3.11.3-alpine3.17
 ARG VERSION_TAG
 ARG GITHUB_ACTIONS
 ARG GITHUB_SHA
@@ -18,9 +18,9 @@ LABEL env=test \
     app=webcolors
 EXPOSE 8080
 WORKDIR /app
-COPY ./pyproject.toml ./
+COPY ./requirements.txt ./
 RUN /usr/local/bin/python -m pip install --upgrade pip --no-cache-dir \
-    && pip install --no-cache-dir . \
+    && pip install --no-cache-dir -r requirements.txt \
     && mkdir /app/logs \
     && chown 1000:2000 /app/logs
 COPY ./src/ ./src/
