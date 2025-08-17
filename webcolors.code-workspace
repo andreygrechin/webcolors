@@ -5,9 +5,37 @@
         }
     ],
     "settings": {
+        "cSpell.ignorePaths": [
+            "config.yaml",
+            "uv.lock",
+            "pyproject.toml",
+            "requirements.txt"
+        ],
         "cSpell.words": [
             "bgcolor",
+            "caplog",
+            "gethostname",
+            "levelname",
+            "MYPYPATH",
+            "pyfile",
             "webcolors"
-        ]
+        ],
+        "mypy-type-checker.args": [
+            "--mypy_path=${workspaceFolder}/src"
+        ],
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "terminal.integrated.env.linux": {
+            "MYPYPATH": "${workspaceFolder}/src",
+            "PYTHONPATH": "${workspaceFolder}/src"
+        },
+        "terminal.integrated.env.osx": {
+            "MYPYPATH": "${workspaceFolder}/src",
+            "PYTHONPATH": "${workspaceFolder}/src"
+        },
+        "terminal.integrated.env.windows": {
+            "MYPYPATH": "${workspaceFolder}/src",
+            "PYTHONPATH": "${workspaceFolder}/src"
+        }
     }
 }

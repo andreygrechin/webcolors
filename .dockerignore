@@ -6,6 +6,12 @@
 .vscode/
 *.code-workspace
 
+.github/
+.ruff_cache/
 .venv/
+env/
+scripts/
+submodules/
+tests/
 
 Dockerfile
