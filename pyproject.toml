@@ -1,61 +1,166 @@
 [project]
 name = "webcolors"
-version = "0.1.19"
-description = "An example of a containerized Flask app to play with k8s and Docker"
-keywords = ["flask", "", "test"]
-requires-python = ">=3.11,<4"
-readme = "README.md"
-dependencies = ["Flask>=2.2.3,<3"]
+description = "An example of a containerized Flask app to play with K8s and Docker"
+keywords = ["flask", "docker", "kubernetes"]
+license = { text = "MIT" }
+requires-python = ">=3.13.7,<3.14"
+readme = { file = "README.md", content-type = "text/markdown" }
+dependencies = ["flask>=3.1.1,<4"]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = { attr = "webcolors.__version__" }
 
 [project.optional-dependencies]
 dev = [
     "bandit",
-    "black",
-    "darglint",
-    "isort",
     "mypy",
     "pip-audit",
-    "pycodestyle",
-    "pydantic",
-    "pydocstyle",
-    "pylint",
-    "rope",
-    "toml",
+    "pytest>=8.4.1,<9",
+    "ruff>=0.12.9,<1",
     "types-PyYAML",
     "types-requests",
 ]
 
 [project.urls]
-repository = "https://github.com/andreygrechin/webcolors"
-
-[tool.black]
-line-length = 100
-target_version = ["py310"]
-include = '\.pyi?$'
-exclude = '((\.eggs|\.git|\.venv)|foo.py)'
-
-[tool.isort]
-profile = "black"
-line_length = 100
+Homepage = "https://github.com/andreygrechin/webcolors"
+Changelog = "https://github.com/andreygrechin/webcolors/releases"
+License = "https://github.com/andreygrechin/webcolors/blob/main/LICENSE"
 
 [tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+python_files = [
+    "check_*.py",
+    "checks_*.py",
+    "test_*.py",
+    "tests_*.py",
+    "*_check.py",
+    "*_checks.py",
+    "*_test.py",
+    "*_tests.py",
+]
+python_classes = ["Check*", "Test*"]
+python_functions = ["check_*", "test_*"]
+testpaths = ["tests"]
+console_output_style = "count"
+markers = ["ws: test WebSocket endpoints", "http: test HTTP/HTTPS endpoints"]
+pythonpath = ["src"]
+
+[tool.uv]
+required-version = ">=0.8.11,<1"
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.13"
 warn_return_any = true
 warn_unused_configs = true
-plugins = "pydantic.mypy"
+# plugins = "pydantic.mypy"
 exclude = '\.venv'
 show_error_codes = true
 
-[tool.pydocstyle]
-convention = "numpy"
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".venv"]
 
-[tool.pylint.FORMAT]
-max-line-length = 100
+# Same as Black.
+line-length = 120
+indent-width = 4
 
-[tool.pylint.BASIC]
-good-names = ["i", "db"]
+target-version = "py313"
 
-[tool.pylint.'MESSAGES CONTROL']
-extension-pkg-whitelist = "pydantic"
+[tool.ruff.lint]
+select = [ # cSpell:disable
+    "F",     # Pyflakes
+    "E",     # pycodestyle
+    "W",     # pycodestyle
+    "C90",   # mccabe
+    "I",     # isort
+    "N",     # pep8-naming
+    "D",     # pydocstyle
+    "UP",    # pyupgrade
+    "YTT",   # flake8-2020
+    "ANN",   # flake8-annotations
+    "ASYNC", # flake8-async
+    "S",     # flake8-bandit
+    "BLE",   # flake8-blind-except
+    "FBT",   # flake8-boolean-trap
+    "B",     # flake8-bugbear
+    "A",     # flake8-builtins
+    "COM",   # flake8-commas
+    # "CPY",   # flake8-copyright
+    "C4",   # flake8-comprehensions
+    "DTZ",  # flake8-datetimez
+    "T10",  # flake8-debugger
+    "DJ",   # flake8-django
+    "EM",   # flake8-errmsg
+    "EXE",  # flake8-executable
+    "FA",   # flake8-future-annotations
+    "ISC",  # flake8-implicit-str-concat
+    "ICN",  # flake8-import-conventions
+    "LOG",  # flake8-logging
+    "G",    # flake8-logging-format
+    "INP",  # flake8-no-pep420
+    "PIE",  # flake8-pie
+    "T20",  # flake8-print
+    "PYI",  # flake8-pyi
+    "PT",   # flake8-pytest-style
+    "Q",    # flake8-quotes
+    "RSE",  # flake8-raise
+    "RET",  # flake8-return
+    "SLF",  # flake8-self
+    "SLOT", # flake8-slots
+    "SIM",  # flake8-simplify
+    "TID",  # flake8-tidy-imports
+    "TC",   # flake8-type-checking
+    "INT",  # flake8-gettext
+    "ARG",  # flake8-unused-arguments
+    "PTH",  # flake8-use-pathlib
+    "TD",   # flake8-todos
+    "FIX",  # flake8-fixme
+    "ERA",  # eradicate
+    "PD",   # pandas-vet
+    "PGH",  # pygrep-hooks
+    "PL",   # Pylint
+    "TRY",  # tryceratops
+    "FLY",  # flynt
+    "NPY",  # NumPy-specific rules
+    "FAST", # FastAPI
+    "AIR",  # Airflow
+    "PERF", # Perflint
+    "FURB", # refurb
+    "DOC",  # pydoclint
+    "RUF",  # Ruff-specific rules
+] # cSpell:enable
+
+ignore = [ # cSpell:disable
+    "TD002",  # missing-todo-author
+    "TD004",  # missing-todo-colon
+    "FIX002", # line-contains-todo
+    "G004",   # logging-f-string
+    "T201",   # print
+    "COM812", # missing-trailing-comma
+    "ERA001", # commented-out-code
+] # cSpell:enable
+
+
+# # Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+line-ending = "lf"
+preview = true
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

@@ -1,4 +1,4 @@
-# An example of a containerized Flask app to play with k8s and Docker
+# An example of a containerized Flask app to play with K8s and Docker
 
 The app shows one page with information about the server inside a container and
 a client who requests this page. By default **gray** background is used for the

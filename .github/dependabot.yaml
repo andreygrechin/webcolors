@@ -1,33 +1,27 @@
 ---
 version: 2
 updates:
-    - package-ecosystem: "github-actions"
-      directory: "/"
-      target-branch: "develop"
-      schedule:
-          interval: "monthly"
-          day: "saturday"
-          time: "18:00"
-          timezone: "Etc/UTC"
-      labels:
-          - "dependencies"
-    - package-ecosystem: "pip"
-      directory: "/"
-      target-branch: "develop"
-      schedule:
-          interval: "monthly"
-          day: "saturday"
-          time: "18:00"
-          timezone: "Etc/UTC"
-      labels:
-          - "dependencies"
-    - package-ecosystem: "docker"
-      directory: "/"
-      target-branch: "develop"
-      schedule:
-          interval: "monthly"
-          day: "saturday"
-          time: "18:00"
-          timezone: "Etc/UTC"
-      labels:
-          - "dependencies"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: semiannually
+    open-pull-requests-limit: 1
+    labels:
+      - dependencies
+      - dependabot
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: semiannually
+    open-pull-requests-limit: 1
+    labels:
+      - dependencies
+      - dependabot
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: semiannually
+    open-pull-requests-limit: 1
+    labels:
+      - dependencies
+      - dependabot
