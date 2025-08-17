@@ -1,5 +1,5 @@
 """Init."""
 
-__version__ = "v0.1.21"
+__version__ = "v0.2.1"
 
 __all__ = ("__version__",)
