@@ -16,7 +16,7 @@ dev = [
     "bandit",
     "mypy",
     "pip-audit",
-    "pytest>=8.4.1,<9",
+    "pytest>=8.4.1,<10",
     "ruff>=0.12.9,<1",
     "types-PyYAML",
     "types-requests",
