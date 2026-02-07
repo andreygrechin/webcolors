@@ -5,7 +5,7 @@ PY_FOLDERS_TESTS =
 .PHONY: all venv clean format lint test security
 
 VENV_PATH = .venv/bin/python3
-AAP_NAME = webcolors
+APP_NAME = webcolors
 
 all: format lint test security
 
@@ -31,7 +31,7 @@ format:
 
 lint: format
 	uv run ruff check --preview src/
-	uv run mypy src/
+	uv run ty check src/
 
 test:
 	uv run pytest -v ./tests/
@@ -40,5 +40,4 @@ security:
 	uv run bandit -r src/
 	uv run pip-audit
 	hadolint Dockerfile
-	uv pip compile pyproject.toml > requirements.txt
 	trivy fs --skip-dirs=./.venv/ .

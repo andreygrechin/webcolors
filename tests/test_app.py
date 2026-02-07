@@ -47,6 +47,16 @@ def test_security_headers(client: FlaskClient) -> None:
     assert headers["X-Content-Type-Options"] == "nosniff"
 
 
+def test_request_data_is_escaped(client: FlaskClient) -> None:
+    """Ensure request-derived values are escaped in HTML output."""
+    payload = "<script>alert(1)</script>"
+    response = client.get("/", headers={"X-Test": payload}, query_string={"value": payload})
+    html = response.get_data(as_text=True)
+
+    assert payload not in html
+    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html
+
+
 def test_color_from_env(app: Flask, original_color: str) -> None:
     """Test color selection from environment variable."""
     test_color = "blue"

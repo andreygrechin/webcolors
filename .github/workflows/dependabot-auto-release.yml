@@ -1,0 +1,58 @@
+---
+# NOTE: Branch protection must allow "github-actions[bot]" to push directly
+# to main, otherwise the version-bump commit and tag push will be rejected.
+name: dependabot-auto-release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  auto-release:
+    name: Bump version, tag, and trigger publish for Dependabot merges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Detect Dependabot merge
+        id: detect
+        run: |
+          AUTHOR="${{ github.event.head_commit.author.username }}"
+          if [ "$AUTHOR" = "dependabot[bot]" ]; then
+            echo "is_dependabot=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Commit author is '$AUTHOR', not dependabot. Skipping."
+            echo "is_dependabot=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.detect.outputs.is_dependabot == 'true'
+        uses: actions/checkout@v6
+
+      - name: Bump patch version, commit, tag, and push
+        if: steps.detect.outputs.is_dependabot == 'true'
+        run: |
+          VERSION_FILE="src/webcolors/__init__.py"
+          CURRENT=$(sed -n 's/^__version__ = "\(v[0-9]*\.[0-9]*\.[0-9]*\)"/\1/p' "$VERSION_FILE")
+          if [ -z "$CURRENT" ]; then
+            echo "::error::Failed to extract version from $VERSION_FILE"
+            exit 1
+          fi
+
+          VERSION_BODY="${CURRENT#v}"
+          MAJOR="${VERSION_BODY%%.*}"
+          REST="${VERSION_BODY#*.}"
+          MINOR="${REST%%.*}"
+          PATCH="${REST#*.}"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+
+          sed -i "s/__version__ = \"${CURRENT}\"/__version__ = \"${NEW_VERSION}\"/" "$VERSION_FILE"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$VERSION_FILE"
+          git commit -m "chore: bump version to ${NEW_VERSION}"
+          git tag "$NEW_VERSION"
+          git push origin main "$NEW_VERSION"

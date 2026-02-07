@@ -1,17 +1,18 @@
 #!/bin/bash
-set -u # fail if reference a variable that hasn’t been set
-set -e # exit if a command fails
+set -u          # fail if reference a variable that hasn't been set
+set -e          # exit if a command fails
 set -o pipefail # fail a pipeline if any command of pipeline failed
 
+APP_NAME=webcolors
+
 image_name=$APP_NAME
-version="$(cat src/"${APP_NAME}"/VERSION)"
+version="$(PYTHONPATH=src uv run python -c "import webcolors; print(webcolors.__version__)")"
 image_tag="${version//+/-}"
-BASE_PYTHON_IMAGE_TAG="3.13.7-alpine3.22"
+BASE_PYTHON_IMAGE_TAG="3.14.3-alpine3.23"
 timestamped_image="${image_name}:${image_tag}-$(date -u '+%Y%m%dT%H%M%SZ')"
 echo "Image name: ${timestamped_image}"
 
-
-docker run --rm --interactive --pull always hadolint/hadolint < Dockerfile
+docker run --rm --interactive --pull always hadolint/hadolint <Dockerfile
 
 docker build \
     --build-arg VERSION_TAG="${image_tag}" \
@@ -32,6 +33,7 @@ docker build \
     .
 container_id=$(docker run --detach --publish 8080:8080 "${timestamped_image}")
 echo "Container ID: ${container_id}"
+sleep 3s
 open http://localhost:8080/
 docker exec -it "${container_id}" sh
 docker rm --force "${container_id}"

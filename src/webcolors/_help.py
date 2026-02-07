@@ -22,7 +22,7 @@ def print_help(logger: Logger, supported_colors: str, host: str, port: int) -> N
         For debug use `--debug` flag.
 
         To open the page from docker container, use: open
-            http://${host}:${port}/
+            http://{host}:{port}/
 
         """
     )
