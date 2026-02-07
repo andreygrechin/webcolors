@@ -3,22 +3,23 @@ name = "webcolors"
 description = "An example of a containerized Flask app to play with K8s and Docker"
 keywords = ["flask", "docker", "kubernetes"]
 license = { text = "MIT" }
-requires-python = ">=3.13.7,<3.14"
+requires-python = ">=3.13.7,<4"
 readme = { file = "README.md", content-type = "text/markdown" }
-dependencies = ["flask>=3.1.1,<4"]
+dependencies = ["flask>=3.1.2,<4"]
 dynamic = ["version"]
 
 [tool.setuptools.dynamic]
 version = { attr = "webcolors.__version__" }
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-    "bandit",
-    "pip-audit",
-    "pytest>=8.4.1,<10",
-    "ruff>=0.12.9,<1",
+    "bandit>=1.9.3",
+    "pip-audit>=2.10.0",
+    "pytest>=9.0.2",
+    "ruff>=0.15.0",
     "ty>=0.0.15",
 ]
+
 
 [project.urls]
 Homepage = "https://github.com/andreygrechin/webcolors"

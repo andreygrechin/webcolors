@@ -9,7 +9,6 @@
             "config.yaml",
             "uv.lock",
             "pyproject.toml",
-            "requirements.txt"
         ],
         "cSpell.words": [
             "bgcolor",
