@@ -31,7 +31,7 @@ format:
 
 lint: format
 	uv run ruff check --preview src/
-	uv run mypy src/
+	uv run ty check src/
 
 test:
 	uv run pytest -v ./tests/

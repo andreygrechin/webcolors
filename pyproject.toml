@@ -14,12 +14,10 @@ version = { attr = "webcolors.__version__" }
 [project.optional-dependencies]
 dev = [
     "bandit",
-    "mypy",
     "pip-audit",
     "pytest>=8.4.1,<10",
     "ruff>=0.12.9,<1",
-    "types-PyYAML",
-    "types-requests",
+    "ty>=0.0.15",
 ]
 
 [project.urls]
@@ -52,17 +50,9 @@ pythonpath = ["src"]
 [tool.uv]
 required-version = ">=0.8.11,<1"
 
-[tool.mypy]
-python_version = "3.13"
-warn_return_any = true
-warn_unused_configs = true
-# plugins = "pydantic.mypy"
-exclude = '\.venv'
-show_error_codes = true
-
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
-exclude = [".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".venv"]
+exclude = [".git", ".pytest_cache", ".ruff_cache", ".venv"]
 
 # Same as Black.
 line-length = 120
