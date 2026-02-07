@@ -12,6 +12,7 @@ from typing import ClassVar
 
 from flask import Flask, make_response, render_template, request
 from flask.wrappers import Response
+from jinja2 import select_autoescape
 
 import webcolors
 from webcolors._help import print_help
@@ -54,6 +55,10 @@ def create_app(test_config: t.Mapping[str, t.Any] | None = None) -> Flask:
         Flask : An instance of the Flask app.
     """
     app = Flask(__name__, instance_relative_config=True)
+    app.jinja_env.autoescape = select_autoescape(
+        enabled_extensions=("html", "htm", "xml", "xhtml", "svg", "j2"),
+        default_for_string=True,
+    )
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -88,7 +93,7 @@ def create_app(test_config: t.Mapping[str, t.Any] | None = None) -> Flask:
             "Server hostname": socket.gethostname(),
             "Server socket": str(request.server),
             "Client IP address": str(request.remote_addr),
-            "Request headers": str(request.headers).replace("\r\n", "<br>"),
+            "Request headers": str(request.headers).replace("\r\n", "\n"),
             "Request method": str(request.method),
             "Request URL": str(request.url),
         }
