@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@3c4e3dcb1aa7874d2c16be7d79418e9b7efd6261 # v4.8.2
         with:
-          allow-licenses: BSD-2-Clause, BSD-3-Clause, MIT, Apache-2.0, MPL-2.0, ISC, CC0-1.0, MIT AND Python-2.0
+          allow-licenses:
+            - BSD-2-Clause
+            - BSD-3-Clause
+            - MIT, Apache-2.0
+            - MPL-2.0
+            - ISC
+            - CC0-1.0
+            - MIT AND Python-2.0
