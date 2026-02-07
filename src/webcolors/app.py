@@ -125,7 +125,7 @@ def main() -> None:
         app.logger.info(
             f"Getting a color from env var. Default color ({colors.default_name}) will be used, if not defined."
         )
-        colors.active_name = os.environ.get("COLOR", default=colors.default_name)
+        colors.active_name = os.environ.get("COLOR", default=colors.default_name).lower()
 
     if colors.active_name == "random":
         app.logger.info("A random color was selected.")
