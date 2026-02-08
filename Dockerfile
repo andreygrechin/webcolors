@@ -1,28 +1,17 @@
-ARG UV_IMAGE=ghcr.io/astral-sh/uv:0.10-python3.14-alpine3.23
-ARG BASE_IMAGE=python:3.14.3-alpine3.23
+ARG BUILD_IMAGE=dhi.io/python:3.14.3-debian13-dev
+ARG RUNTIME_IMAGE=dhi.io/python:3.14.3-debian13
 
-# hadolint ignore=DL3006
-FROM $UV_IMAGE AS uv
+FROM $BUILD_IMAGE AS builder
 
-# hadolint ignore=DL3006
-FROM $BASE_IMAGE AS builder
-
-COPY --from=uv /usr/local/bin/uv /usr/local/bin/uvx /usr/local/bin/
+COPY --from=dhi.io/uv:0-debian13-dev /usr/local/bin/uv /usr/local/bin/uvx /usr/local/bin/
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project --no-dev
-COPY ./src/ src/
-COPY ./LICENSE .
-COPY ./pyproject.toml .
-COPY ./uv.lock .
+    uv sync --locked --no-install-project --no-dev --no-editable
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
-
-# hadolint ignore=DL3006
-FROM $BASE_IMAGE
+FROM $RUNTIME_IMAGE
 
 ARG APP_NAME=webcolors
 ARG VERSION_TAG
@@ -34,22 +23,25 @@ ARG RUNNER_OS
 ARG WEBCOLORS_HOST
 ARG WEBCOLORS_PORT
 
-ENV VERSION_TAG=${VERSION_TAG:-N/A}
-ENV GITHUB_ACTIONS=${GITHUB_ACTIONS:-N/A}
-ENV GITHUB_SHA=${GITHUB_SHA:-N/A}
-ENV GITHUB_REF=${GITHUB_REF:-N/A}
-ENV RUNNER_ARCH=${RUNNER_ARCH:-N/A}
-ENV RUNNER_OS=${RUNNER_OS:-N/A}
-ENV APP_NAME=${APP_NAME}
-ENV WEBCOLORS_HOST=${WEBCOLORS_HOST:-0.0.0.0}
-ENV WEBCOLORS_PORT=${WEBCOLORS_PORT:-8080}
-ENV PYTHONPATH=/app/src
+ENV VERSION_TAG=${VERSION_TAG:-N/A} \
+    GITHUB_ACTIONS=${GITHUB_ACTIONS:-N/A} \
+    GITHUB_SHA=${GITHUB_SHA:-N/A} \
+    GITHUB_REF=${GITHUB_REF:-N/A} \
+    RUNNER_ARCH=${RUNNER_ARCH:-N/A} \
+    RUNNER_OS=${RUNNER_OS:-N/A} \
+    APP_NAME=${APP_NAME} \
+    WEBCOLORS_HOST=${WEBCOLORS_HOST:-0.0.0.0} \
+    WEBCOLORS_PORT=${WEBCOLORS_PORT:-8080} \
+    PYTHONPATH=/app/src \
+    PATH="/app/.venv/bin:${PATH}"
+
+WORKDIR /app
+COPY --from=builder /app/.venv /app/.venv
+COPY ./src/ src/
+COPY ./LICENSE .
+COPY ./pyproject.toml .
+COPY ./uv.lock .
 
 EXPOSE 8080
-WORKDIR /app
 
-COPY --from=builder /app /app
-
-RUN adduser -D -u 1000 -s /sbin/nologin "$APP_NAME"
-USER "$APP_NAME"
-CMD ["/app/.venv/bin/python3", "/app/src/webcolors/app.py"]
+CMD ["python3", "/app/src/webcolors/app.py"]
