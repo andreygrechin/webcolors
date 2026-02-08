@@ -8,16 +8,19 @@ APP_NAME=webcolors
 image_name=$APP_NAME
 version="$(PYTHONPATH=src uv run python -c "import webcolors; print(webcolors.__version__)")"
 image_tag="${version//+/-}"
-BASE_PYTHON_IMAGE_TAG="3.14.3-alpine3.23"
 timestamped_image="${image_name}:${image_tag}-$(date -u '+%Y%m%dT%H%M%SZ')"
 echo "Image name: ${timestamped_image}"
+BUILD_IMAGE=dhi.io/python:3.14.3-debian13-dev
+RUNTIME_IMAGE=dhi.io/python:3.14.3-debian13-dev
 
 docker run --rm --interactive --pull always hadolint/hadolint <Dockerfile
 
 docker build \
     --build-arg VERSION_TAG="${image_tag}" \
-    --build-arg BASE_PYTHON_IMAGE_TAG="${BASE_PYTHON_IMAGE_TAG}" \
+    --build-arg BUILD_IMAGE="${BUILD_IMAGE}" \
+    --build-arg RUNTIME_IMAGE="${RUNTIME_IMAGE}" \
     --tag "${timestamped_image}" \
+    --file Dockerfile \
     --platform linux/amd64,linux/arm64 \
     --annotation "org.opencontainers.image.created=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
     --annotation "org.opencontainers.image.url=https://github.com/andreygrechin/webcolors" \
@@ -29,7 +32,7 @@ docker build \
     --annotation "org.opencontainers.image.description='An example of a containerized Flask app to play with K8s and Docker'" \
     --annotation "org.opencontainers.image.authors=$(git config --get user.email)" \
     --annotation "org.opencontainers.image.licenses=MIT" \
-    --annotation "org.opencontainers.image.base.name=docker.io/python:${BASE_PYTHON_IMAGE_TAG}" \
+    --annotation "org.opencontainers.image.base.name=${RUNTIME_IMAGE}" \
     .
 container_id=$(docker run --detach --publish 8080:8080 "${timestamped_image}")
 echo "Container ID: ${container_id}"
