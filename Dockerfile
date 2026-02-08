@@ -3,7 +3,7 @@ ARG RUNTIME_IMAGE=dhi.io/python:3.14.3-debian13
 
 FROM $BUILD_IMAGE AS builder
 
-COPY --from=dhi.io/uv:0-debian13-dev /usr/local/bin/uv /usr/local/bin/uvx /usr/local/bin/
+COPY --from=dhi.io/uv:0.10.0-debian13-dev /usr/local/bin/uv /usr/local/bin/uvx /usr/local/bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
 RUN --mount=type=cache,target=/root/.cache/uv \
