@@ -20,6 +20,15 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
+      - name: Label security updates
+        if: steps.metadata.outputs.alert-state != ''
+        run: |
+          gh label create security --description "Security patch" --color "B60205" --force 2>/dev/null || true
+          gh pr edit "$PR_URL" --add-label "security"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Approve and enable auto-merge
         if: steps.metadata.outputs.update-type != 'version-update:semver-major'
         run: |

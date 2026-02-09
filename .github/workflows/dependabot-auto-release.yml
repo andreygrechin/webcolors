@@ -1,4 +1,10 @@
 ---
+# Automatically bump the patch version, tag, and trigger a container publish
+# when a Dependabot **security** PR is merged to main.
+#
+# Non-security Dependabot updates are still auto-merged (by the auto-merge
+# workflow) but do NOT get a version bump or a new release.
+#
 # NOTE: Branch protection must allow "github-actions[bot]" to push directly
 # to main, otherwise the version-bump commit and tag push will be rejected.
 name: dependabot-auto-release
@@ -9,10 +15,11 @@ on:
 
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
   auto-release:
-    name: Bump version, tag, and trigger publish for Dependabot merges
+    name: Bump version, tag, and trigger publish for Dependabot security merges
     runs-on: ubuntu-latest
     steps:
       - name: Detect Dependabot merge
@@ -26,12 +33,40 @@ jobs:
             echo "is_dependabot=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Checkout
+      - name: Check for security label on merged PR
         if: steps.detect.outputs.is_dependabot == 'true'
+        id: security
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMIT_SHA="${{ github.event.head_commit.id }}"
+          PR_NUMBER=$(gh api "/repos/${{ github.repository }}/commits/${COMMIT_SHA}/pulls" \
+            --jq '.[0].number' 2>/dev/null || echo "")
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "::warning::Could not find PR associated with commit ${COMMIT_SHA}. Skipping."
+            echo "is_security=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          LABELS=$(gh pr view "$PR_NUMBER" \
+            --repo "${{ github.repository }}" \
+            --json labels --jq '.labels[].name' 2>/dev/null || echo "")
+
+          if echo "$LABELS" | grep -q "^security$"; then
+            echo "Security label found on PR #${PR_NUMBER}. Will bump version."
+            echo "is_security=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No security label on PR #${PR_NUMBER}. Skipping version bump."
+            echo "is_security=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.detect.outputs.is_dependabot == 'true' && steps.security.outputs.is_security == 'true'
         uses: actions/checkout@v6
 
       - name: Bump patch version, commit, tag, and push
-        if: steps.detect.outputs.is_dependabot == 'true'
+        if: steps.detect.outputs.is_dependabot == 'true' && steps.security.outputs.is_security == 'true'
         run: |
           VERSION_FILE="src/webcolors/__init__.py"
           CURRENT=$(sed -n 's/^__version__ = "\(v[0-9]*\.[0-9]*\.[0-9]*\)"/\1/p' "$VERSION_FILE")
