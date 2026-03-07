@@ -42,6 +42,9 @@ COPY ./LICENSE .
 COPY ./pyproject.toml .
 COPY ./uv.lock .
 
+RUN useradd --system --no-create-home --shell /usr/sbin/nologin "$APP_NAME"
+USER "$APP_NAME"
+
 EXPOSE 8080
 
 CMD ["python3", "/app/src/webcolors/app.py"]
