@@ -1,4 +1,4 @@
-# ruff: noqa: DOC201 DOC402 S101 PLC0415 D100 ARG001 PLR2004
+# ruff: noqa: S101 PLC0415 D100 ARG001 PLR2004
 import os
 from collections.abc import Generator
 
@@ -23,7 +23,7 @@ def client(app: Flask) -> FlaskClient:
 
 
 @pytest.fixture
-def original_color() -> Generator[str, None, None]:
+def original_color() -> Generator[str]:
     """Save and restore the original active color."""
     original = colors.active_name
     yield original
@@ -81,3 +81,14 @@ def test_random_color(app: Flask, original_color: str) -> None:
 
             colors.active_name = random.choice(list(colors.names))
         assert colors.active_name in colors.names
+
+
+def test_is_debug_enabled_only_for_localhost() -> None:
+    """Debug mode should only be enabled for localhost bindings."""
+    from webcolors.app import is_debug_enabled
+
+    assert is_debug_enabled(debug_requested=True, host="localhost")
+    assert is_debug_enabled(debug_requested=True, host="127.0.0.1")
+    remote_host = "0.0.0.0"
+    assert not is_debug_enabled(debug_requested=True, host=remote_host)
+    assert not is_debug_enabled(debug_requested=False, host="localhost")

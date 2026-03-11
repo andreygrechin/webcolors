@@ -27,6 +27,20 @@ logging.basicConfig(
 
 HOST: str = os.getenv("WEBCOLORS_HOST", "localhost")
 PORT: int = int(os.getenv("WEBCOLORS_PORT", "8080"))
+LOCALHOSTS: tuple[str, ...] = ("localhost", "127.0.0.1", "::1")
+
+
+def is_debug_enabled(*, debug_requested: bool, host: str) -> bool:
+    """Enable debug mode only for localhost bindings.
+
+    Args:
+        debug_requested (bool): Whether debug mode was requested.
+        host (str): The host the app is binding to.
+
+    Returns:
+        bool: True if debug mode should be enabled, False otherwise.
+    """
+    return debug_requested and host in LOCALHOSTS
 
 
 @dataclass
@@ -137,8 +151,12 @@ def main() -> None:
 
     app.logger.info(f"Finally, {colors.active_name} color will be used.\n")
 
+    run_debug: bool = is_debug_enabled(debug_requested=args.debug, host=HOST)
+    if args.debug and not run_debug:
+        app.logger.warning("Debug mode requested, but disabled because WEBCOLORS_HOST is not localhost.")
+
     # Run Flask
-    app.run(host=HOST, port=PORT, debug=args.debug)  # nosec
+    app.run(host=HOST, port=PORT, debug=run_debug)  # nosec
 
 
 if __name__ == "__main__":
